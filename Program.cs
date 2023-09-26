@@ -16,7 +16,7 @@ internal class Program
             tree.Insert(100);
             Console.WriteLine(tree);
 
-            tree = AdditionalTreeFunctions<int>.BalanceTree(tree);
+            AdditionalTreeFunctions<int>.BalanceTree(tree);
             Console.WriteLine(tree);
             Console.WriteLine(AdditionalTreeFunctions<int>.PrefixTraverse(tree));
             tree.Remove(57);

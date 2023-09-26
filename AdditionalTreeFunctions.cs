@@ -85,25 +85,27 @@ internal static class AdditionalTreeFunctions<T> where T : struct, IComparable<T
         return leftHeight - rightHeight; 
     }
 
-    public static BinarySearchTree<T> BalanceTree(BinarySearchTree<T> tree)
+    public static void BalanceTree(BinarySearchTree<T> tree)
     {
         if (tree.Root is null) throw new InvalidOperationException("Tree is empty.");
-        tree.Root = BalanceSubtree(tree.Root);
-        return tree;
-    }
 
-    private static TreeNode<T> BalanceSubtree(TreeNode<T> node)
-    {
-        var balance = GetBalance(node);
-
-        return balance switch
+        switch (GetBalance(tree.Root))
         {
-            > 1 when GetBalance(node.Left) >= 0 => SmallRightRotation(node),
-            > 1 => BigRightRotation(node),
-            < -1 when GetBalance(node.Right) <= 0 => SmallLeftRotation(node),
-            < -1 => BigLeftRotation(node),
-            _ => node
-        };
+            case > 1 when GetBalance(tree.Root.Left) >= 0: 
+                tree.Root = SmallRightRotation(tree.Root);
+                return;
+            case > 1:
+                tree.Root = BigRightRotation(tree.Root);
+                return;
+            case < -1 when GetBalance(tree.Root.Right) <= 0:
+                tree.Root = SmallLeftRotation(tree.Root);
+                return;
+            case < -1:
+                tree.Root = BigLeftRotation(tree.Root);
+                return;
+            default:
+                return;
+        }
     }
 
     private static TreeNode<T> SmallLeftRotation(TreeNode<T> root)
