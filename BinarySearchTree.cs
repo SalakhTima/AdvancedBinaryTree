@@ -1,7 +1,7 @@
 ﻿using System.Text;
 namespace AdvancedBinarySearchTree;
 
-internal class BinarySearchTree<T> where T : struct, IComparable<T>
+internal class BinarySearchTree<T> where T : struct, IComparable<T> 
 {
     public TreeNode<T>? Root { get; set; }
     public T Find(T value)
@@ -52,45 +52,39 @@ internal class BinarySearchTree<T> where T : struct, IComparable<T>
         }
     }
 
-    public void Remove(T value) => Root = RemoveNode(Root, value);
-        
-    private TreeNode<T>? RemoveNode(TreeNode<T>? root, T value)
+    public void Remove(T value) => Root = AdditionalFunctions<T>.RemoveNode(Root, value);
+
+    public static BinarySearchTree<T> operator +(BinarySearchTree<T> tree, T value)
     {
-        if (Root is null) throw new InvalidOperationException("Tree is empty.");
-
-        var comparison = value.CompareTo(root!.Data);
-
-        switch (comparison)
-        {
-            case < 0:
-                root.Left = RemoveNode(root.Left, value);
-                break;
-            case > 0:
-                root.Right = RemoveNode(root.Right, value);
-                break;
-            default:
-            {
-                if (root.Left is null)
-                {
-                    return root.Right;
-                }
-                if (root.Right is null)
-                {
-                    return root.Left;
-                }
-                root.Data = AdditionalTreeFunctions<T>.FindMinValue(root.Right);
-                root.Right = RemoveNode(root.Right, root.Data);
-                break;
-            }
-        }
-        return root;
+       return new BinarySearchTree<T>
+       {
+           Root = AdditionalFunctions<T>.IncreaseAllNodes(tree.Root, value)
+       };
     }
+
+    public static BinarySearchTree<T> operator +(BinarySearchTree<T> tree1, BinarySearchTree<T> tree2)
+    {
+        var nodes1 = AdditionalFunctions<T>.GetAllNodes(tree1.Root);
+        var nodes2 = AdditionalFunctions<T>.GetAllNodes(tree2.Root);
+        var newTree = new BinarySearchTree<T>();
+
+        foreach (var node in nodes1) newTree.Insert(node.Data);
+        foreach (var node in nodes2) newTree.Insert(node.Data);
+
+        AdditionalFunctions<T>.BalanceTree(newTree);
+        return newTree;
+    }
+
+    //public static BinarySearchTree<T> operator +(TreeNode<T> leftSubtree, TreeNode<T> rightSubtree)
+    //{
+
+    //}
 
     public override string ToString()
     {
         if (Root is null) throw new InvalidOperationException("Tree is empty.");
 
-        var height = AdditionalTreeFunctions<T>.GetTreeHeight(Root);
+        var height = AdditionalFunctions<T>.GetHeight(Root);
         var width = (int)Math.Pow(2, height + 1) - 1;  
         var tree = new string?[height, width]; 
 
@@ -102,7 +96,7 @@ internal class BinarySearchTree<T> where T : struct, IComparable<T>
             }
         }
 
-        AdditionalTreeFunctions<T>.FillTwoDimensionalArray(tree, Root, 0, 0, width - 1);
+        AdditionalFunctions<T>.FillTwoDimensionalArray(tree, Root, 0, 0, width - 1);
         StringBuilder output = new StringBuilder();
 
         for (int i = 0; i < height; i++)

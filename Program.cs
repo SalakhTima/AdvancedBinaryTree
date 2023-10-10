@@ -7,23 +7,17 @@ internal class Program
         try
         {
             BinarySearchTree<int> tree = new BinarySearchTree<int>();
-            tree.Insert(19);
+            tree.Insert(19);            
+            tree.Insert(20);
+            tree.Insert(21);
+            tree.Insert(22);
             tree.Insert(11);
-            tree.Insert(57);
-            tree.Insert(88);
-            tree.Insert(34);
-            tree.Insert(99);
-            tree.Insert(100);
-            Console.WriteLine(tree);
 
-            AdditionalTreeFunctions<int>.BalanceTree(tree);
-            Console.WriteLine(tree);
-            Console.WriteLine(AdditionalTreeFunctions<int>.PrefixTraverse(tree));
-            tree.Remove(57);
+            BinarySearchTree<int> tree2 = tree + 10;
 
-            Console.WriteLine(AdditionalTreeFunctions<int>.PrefixTraverse(tree));
-            Console.WriteLine(tree);
-            Console.WriteLine(tree.Find(99));
+            BinarySearchTree<int> tree3 = tree2 + tree;
+
+            Console.WriteLine(tree3);
         }
         catch (Exception e)
         {
@@ -31,4 +25,3 @@ internal class Program
         }
     }
 }
-
